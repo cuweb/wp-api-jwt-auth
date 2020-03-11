@@ -274,16 +274,16 @@ class Jwt_Auth_Public
         try {
             $token = JWT::decode($token, $secret_key, array('HS256'));
             /** The Token is decoded now validate the iss */
-            // if ($token->iss != get_bloginfo('url')) {
-            //     /** The iss do not match, return error */
-            //     return new WP_Error(
-            //         'jwt_auth_bad_iss',
-            //         'The iss do not match with this server',
-            //         array(
-            //             'status' => 403,
-            //         )
-            //     );
-            // }
+            if ($token->iss != get_bloginfo('url')) {
+                /** The iss do not match, return error */
+                return new WP_Error(
+                    'jwt_auth_bad_iss',
+                    'The iss do not match with this server',
+                    array(
+                        'status' => 403,
+                    )
+                );
+            }
 
             /** So far so good, validate the user id in the token */
             if (!isset($token->data->user->id)) {
